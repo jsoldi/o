@@ -90,13 +90,6 @@ var O = {
 
     Leaf: function (data) {
         if (typeof data !== 'undefined') {
-            //            if (this.children().length) {
-            //                this.data('o-readonly-data', data);
-            //                this.find('*').each(function () {
-            //                    O.Leaf.apply($(this), [data]);
-            //                });
-            //            }
-            //            else {
             switch (this.get(0).nodeName.toUpperCase()) {
                 case 'INPUT':
                     var type = this.attr('type');
@@ -148,7 +141,6 @@ var O = {
                     O.ResolveText(this, data);
                     break;
             }
-            //            }
         }
         else {
             switch (this.get(0).nodeName.toUpperCase()) {
@@ -194,7 +186,7 @@ var O = {
                     $clone.removeData('o-clone-func');
                 }
 
-                $clone.removeAttr('id');
+                $clone.find('*').andSelf().removeAttr('id');
                 $clone.show();
                 O.Auto.apply($clone, [data[i]]);
                 $clone.data('o-parent', expression);
