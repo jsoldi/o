@@ -1,24 +1,20 @@
 ﻿// Copyright 2012, Juan Soldi
 // Licensed under the MIT license.
 //
-// Requres jQuery:
+// Requres jQuery
 // https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js
 
-$.fn.directDataOs = function () {
-    return $(this).find('[data-o]').not($(this).find('[data-o] [data-o]'));
-}
-
-$.override = function (obj1, obj2) {
-    if ($.isPlainObject(obj2)) return $.extend(true, {}, obj1, obj2);
-    else if ($.isArray(obj2)) return $.extend(true, [], obj1, obj2);
-    else return obj2;
-}
-
-RegExp.escape = function(text) {
-    return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
-}
-
 var O = {
+
+    EscapeRegExp: function (text) {
+        return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+    },
+
+    Override: function (obj1, obj2) {
+        if ($.isPlainObject(obj2)) return $.extend(true, {}, obj1, obj2);
+        else if ($.isArray(obj2)) return $.extend(true, [], obj1, obj2);
+        else return obj2;
+    },
 
     GetDefaultFunc: function (data) {
         /// <summary>
@@ -54,7 +50,7 @@ var O = {
                     var o = data;
                     var exp = match.substring(1, match.length - 1);
                     var result = eval(exp);
-                    var esc = RegExp.escape(exp);
+                    var esc = O.EscapeRegExp(exp);
                     var reg = "\\[" + esc + "\\]";
                     text = text.replace(new RegExp(reg, 'g'), encode ? encodeURIComponent(result) : result);
                 }
@@ -181,7 +177,8 @@ var O = {
         else {
             var expression = this.attr('data-o');
             this.parent().children().each(function () {
-                if ($(this).data('o-parent') == expression) $(this).remove();
+                var $this = $(this);
+                if ($this.data('o-parent') == expression) $this.remove();
             });
             var $last = this;
             oFunc = this.data('o-func');
@@ -215,17 +212,18 @@ var O = {
         var o;
         if (typeof data === 'undefined') o = {};
         else o = data;
-        this.directDataOs().each(function () {
-            var expression = $(this).attr('data-o') || "o";
+        this.find('[data-o]').not(this.find('[data-o] [data-o]')).each(function () {
+            var $this = $(this);
+            var expression = $this.attr('data-o') || "o";
             if (typeof data === 'undefined') {
-                var part = O.Auto.apply($(this));
+                var part = O.Auto.apply($this);
                 if (typeof part !== 'undefined') {
                     var old_o = o;
                     eval(expression + " = part");
-                    o = $.override(old_o, o);
+                    o = O.Override(old_o, o);
                 }
             }
-            else O.Auto.apply($(this), [eval(expression)]);
+            else O.Auto.apply($this, [eval(expression)]);
         });
         return o;
     },
