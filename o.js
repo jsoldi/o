@@ -190,6 +190,7 @@ var O = {
                 $clone.show();
                 O.Auto.apply($clone, [data[i]]);
                 $clone.data('o-parent', expression);
+                $clone.data('o-clone-index', i);
                 $clone.attr('data-o', expression + "[" + i + "]");
                 $clone.insertAfter($last);
                 $last = $clone;

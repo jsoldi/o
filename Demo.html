@@ -1,0 +1,88 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>o Sample</title>
+    <style>body{font:11px/24px Verdana,Arial,Helvetica,sans-serif}table{border-collapse:collapse;width:320px}th{padding:0 .5em;text-align:left;background-color:#cae3fc;border-top:1px solid #287bce;border-bottom:1px solid #287bce}tr.yellow td{border-top:1px solid #fb7a31;border-bottom:1px solid #fb7a31;background:#ffc}td{border-bottom:1px solid #ccc;padding:0 .5em}td:first-child{width:190px}td+td{border-left:1px solid #ccc;text-align:center}</style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script src="o.js"></script>
+    <script>
+
+        // Array Remove - By John Resig (MIT Licensed)
+        Array.remove = function (array, from, to) {
+            var rest = array.slice((to || from) + 1 || array.length);
+            array.length = from < 0 ? array.length + from : from;
+            return array.push.apply(array, rest);
+        };
+
+        var startingData = {
+            projectName: 'Project 1',
+            staff: [
+                { name: 'bob', age: 33, hourlyRate: 10, color: '#FF0000' },
+                { name: 'BILL', age: 23, hourlyRate: 12, color: '#004FF1' },
+            ]
+        };
+
+        function refresh() {
+            startingData.newStaff = { name: '', age: '', hourlyRate: '', color: '' };
+            $('body').o(startingData); // Write to HTML
+            $('#log').text(JSON.stringify(startingData, null, '  '));
+        }
+
+        function add() {
+            startingData = $('body').o(); // Read from HTML
+            startingData.staff.push(startingData.newStaff);
+            refresh();
+        }
+
+        function remove(element) {
+            var index = $(element).closest('tr').data('o-clone-index');
+            startingData = $('body').o(); // Read from HTML
+            Array.remove(startingData.staff, index);
+            refresh();
+        }
+
+        $(document).ready(function () {
+            $('.color').data('o-func', function (o) {
+                // This is how to override the default o-func which reads and writes the data:
+                if (typeof o !== 'undefined') { // Write to HTML:
+                    this.text(o);
+                    this.css('background-color', o);
+                }
+                else return this.text(); // Read from HTML
+            })
+            refresh();
+        });
+
+    </script>
+</head>
+
+<body>
+    <h2 data-o="o.projectName">[o]</h2>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Age</th>
+            <th>Hourly Rate</th>
+            <th>Color</th>
+            <th></th>
+        </tr>
+        <tr data-o="o.staff">
+            <td data-o="o.name">[o.charAt(0).toUpperCase() + o.slice(1).toLowerCase()]</td>
+            <td data-o="o.age">[o]</td>
+            <td data-o="o.hourlyRate">$[o]</td>
+            <td class="color" data-o="o.color"></td>
+            <td><input type="button" value="Remove" onclick="remove(this)" /></td>
+        </tr>
+        <tr data-o="o.newStaff">
+            <td><input data-o="o.name" /></td>
+            <td><input data-o="o.age" /></td>
+            <td><input data-o="o.hourlyRate" /></td>
+            <td><input data-o="o.color" /></td>
+            <td><input type="button" value="Add" onclick="add()" /></td>
+        </tr>
+    </table>
+    <br />
+    <textarea id="log" rows="20" cols="75"></textarea>
+</body>
+
+</html>
