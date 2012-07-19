@@ -1,4 +1,8 @@
-﻿/// <reference path="jquery-1.5.1-vsdoc.js" />
+﻿// Copyright 2012, Juan Soldi
+// Licensed under the MIT license.
+//
+// Requres jQuery:
+// https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js
 
 $.fn.directDataOs = function () {
     return $(this).find('[data-o]').not($(this).find('[data-o] [data-o]'));

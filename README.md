@@ -1,4 +1,6 @@
-o
+---- o ----
 =
+Easily reads and write javascript data from and to HTML elements. 
+Demo can be found at: 
 
-Easily turn data into HTML and HTML into data.
+<https://github.com/downloads/jsoldi/o/oSample.htm>
