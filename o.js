@@ -2,7 +2,6 @@
 // Licensed under the MIT license.
 // v1.0
 // Requres jQuery
-// https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js
 
 var O = {
 
